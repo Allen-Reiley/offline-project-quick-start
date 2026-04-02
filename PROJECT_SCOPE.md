@@ -1,7 +1,6 @@
 
 Below is the **PROJECT_SCOPE.md**. This is the definitive blueprint for our factory.
 
-Instruction: Read into REMEMBER.md, scan the file to read the prompt conversation that was had in the creation of the project, to when it worked and to when things got messy. It's to serve as a reference for what worked an what didn't, the errors we encountered and the fixes that were made, it's to inspire the highest level of quality in attempt to reduce the number of failures we encounter in the process of creating this project. For consistency purposeses, after every prompt and project modification, this code base will be uploaded to git, including having the conversations being included into the REMEMBER.md, so don't cache the link and/or information you find in the repo, the data will always be updated, so always update your context accordingly. Read into the errors and logs sent to you in the Gemini chat, ensure that once you've read the entire repo, refer back to all the files that hold significance to the problem at hand, read them, modify and load them into your response.
 
 ---
 
@@ -73,74 +72,80 @@ These are the custom scripts that turn the Seed into a Factory:
 
 ---
 
-## **I. Project Overview & Strategic Intent**
-The **AuraWorks Master Seed** is designed as a portable, Docker-orchestrated development environment.
-* **Structure:** A decoupled Monorepo (Frontend/Backend).
-* **Intent:** To eliminate "environment drift" and enable zero-latency development for industrial clients in the East Rand by having all "Lego Bricks" (UI components) and "Heavy Machinery" (Python processing) pre-baked into local containers.
+This updated **PROJECT_SCOPE.md** shifts our strategy to a **Local-First, Offline-Reliant Development** model. We are pivoting to ensure the core Python and Next.js logic is 100% functional on your Pop!_OS machine before we wrap it in Docker "armor."
+
+Copy and paste this entire block into your `PROJECT_SCOPE.md` file.
 
 ---
 
-## **II. Phase 1: Infrastructure Synchronization (Immediate)**
-The priority is fixing the "File Not Found" errors by aligning the Docker Volume mappings and Build Contexts.
+# PROJECT_SCOPE.md: AuraWorks Master Seed
 
-### **1. Backend "UV" Engine Setup**
-We are using `uv` for 10x faster dependency resolution.
-* **Target:** `backend/Dockerfile`
-* **Logic:** Move `uv` binary to `/usr/local/bin` and ensure `pyproject.toml` is the source of truth.
-* **Packages to Add:** * `sqlmodel`, `alembic` (Database)
-    * `pandas`, `openpyxl` (Industrial Data)
-    * `reportlab` (PDF generation)
-    * `pydantic-settings`, `python-dotenv` (Config)
-    * `loguru` (Diagnostics)
+## 1. Project Intent & Philosophy
+The **Master Seed** is a high-performance "Project Factory" designed for the East Rand industrial B2B market. It prioritizes **Local-First Development** to ensure 100% offline stability, with Docker orchestration as the final deployment and environment-locking phase.
 
-### **2. Frontend "Atomic" Setup**
-* **Target:** `frontend/Dockerfile`
-* **Logic:** Ensure the `build context` includes the `components/` folder moved from the root.
-* **Packages to Add:** * `framer-motion`, `clsx`, `tailwind-merge` (UI Core)
-    * `lucide-react` (Icons)
-    * `axios`, `@tanstack/react-query` (Data Bridge)
-    * `recharts` (Analytics)
+* **Atomic Design:** UI built via "Lego Bricks" (Shadcn, Aceternity, Tailwind).
+* **Local-First Engine:** Development happens directly on the host (Pop!_OS) using `uv` and `npm` for instant feedback.
+* **Industrial Scale:** Built to process R100k+ contract data using Pandas and professional PDF reporting.
 
 ---
 
-## **III. Phase 2: The Industrial Lead Engine**
-Building the first functional logic for the B2B market analysis.
+## 2. Core Architecture (Local-First)
+The project is a decoupled Monorepo. All logic is strictly separated to ensure portability.
 
-1.  **Schema Definition:** Create `backend/app/models/industrial.py`.
-2.  **Seeding Logic:** Create a `seed.py` script to inject local East Rand industrial data (Companies, Sector, Contract Value) into the Postgres DB.
-3.  **The API Layer:** Build CRUD endpoints in `backend/app/api/v1/`.
-
----
-
-## **IV. Phase 3: The Scaffolding Scripts (Aura-CLI)**
-This turns the repository from a "Project" into a "Factory."
-
-* **`aura-init <project-name>`**:
-    * Clones the Seed.
-    * Renames the Docker containers.
-    * Generates a new `.env` with unique keys.
-* **`aura-pull <component-name>`**: 
-    * Queries the local "Warehouse" (Verdaccio).
-    * Injects the code into `frontend/components/`.
+```text
+aura-master-seed/
+├── frontend/                # Next.js 14+ (App Router)
+│   ├── components/          # Hydrated UI Warehouse (Aceternity, etc.)
+│   ├── app/                 # Routes & Logic
+│   └── package.json         # Engine: framer-motion, lucide, tanstack-query
+├── backend/                 # FastAPI (Python 3.11)
+│   ├── app/                 # core/, api/, models/, services/
+│   ├── pyproject.toml       # Engine: sqlmodel, pandas, reportlab
+│   └── aura_local.db        # Local SQLite (Offline Dev Database)
+├── docker-compose.yml       # Orchestrator (DEFERRED TO PHASE 4)
+├── .env                     # Local Environment Secrets
+└── STRUCTURE.md             # File system manifest
+```
 
 ---
 
-## **V. Phase 4: Verification & Hardening**
-1.  **Offline Build Test:** Disable networking and run `docker compose build --no-cache`.
-2.  **Health Check:** Implement a `/health` route that checks DB latency and Disk I/O.
-3.  **Documentation:** Generate automated API docs via FastAPI `/docs`.
+## 3. Implementation Roadmap (The Law)
+
+### **Phase 1: Local Environment Sync (Current)**
+* **Backend:** Initialize `uv venv` and install the "Heavy Machinery" (FastAPI, SQLModel, Pandas).
+* **Frontend:** Install "Atomic" packages (Framer Motion, Lucide, Axios).
+* **Database:** Utilize SQLite (`aura_local.db`) for zero-config offline development.
+
+### **Phase 2: The Industrial Lead Engine**
+* **Schema:** Define `IndustrialClient` models in `backend/app/models/`.
+* **Data Logic:** Implement Pandas scripts to analyze East Rand industrial sectors.
+* **API:** Build CRUD endpoints for lead management and PDF generation via ReportLab.
+
+### **Phase 3: The Scaffolding Scripts (Aura-CLI)**
+* **`aura-init`**: Clones the seed into a new project directory.
+* **`aura-add`**: Injects UI components from the local warehouse into the project.
+
+### **Phase 4: Docker Hardening**
+* Synchronize `Dockerfiles` with the final local code.
+* Migrate from SQLite to PostgreSQL via `docker-compose`.
+* Conduct final "Internet-Off" build test.
 
 ---
 
-### **Summary Table: Package Manifest**
+## 4. Technical Stack Manifest
 
 | Domain | Backend (Python/UV) | Frontend (Next.js/TS) |
 | :--- | :--- | :--- |
 | **Core** | `fastapi`, `uvicorn` | `next`, `react`, `typescript` |
-| **Data** | `sqlmodel`, `pandas` | `tanstack-query`, `recharts` |
-| **UI/UX** | N/A | `framer-motion`, `lucide-react` |
-| **Industrial** | `reportlab`, `openpyxl` | `date-fns` |
-| **Security** | `python-jose`, `passlib` | `next-auth` (Planned) |
+| **Data** | `sqlmodel`, `pandas`, `openpyxl` | `@tanstack/react-query`, `recharts` |
+| **UI/UX** | N/A | `framer-motion`, `lucide-react`, `clsx` |
+| **Industrial** | `reportlab`, `loguru` | `date-fns`, `tailwind-merge` |
+| **Config** | `pydantic-settings`, `python-dotenv` | `.env.local` |
 
+---
 
+## 5. Instructions for Gemini AI
+* **Supreme Authority:** This document overrides all other file suggestions.
+* **Context Sync:** Read the GitHub repo ([Allen-Reiley/offline-project-quick-start](https://github.com/Allen-Reiley/offline-project-quick-start)) before every response.
+* **Logic First:** Prioritize local execution (`uv`, `npm`) over Docker commands until Phase 4.
 
