@@ -4676,5 +4676,135 @@ Once these files align, we will move to Phase 2: The Industrial Lead Engine. I h
 
 I am ready. Shall we finalize the Docker build and move to the Python Database Models?
 
+Default statement: Reference PROJECT_SCOPE.md for each response, PROJECT_SCOPE.md holds higher authority to all files, it's to source of which the entire project is created on. Read and reference the PROJECT_SCOPE.md per prompt, treating the implementation roadmap as law, and do not ignore the instruction placed at the top of the document, then read the entire repo each and every time, ensuring your context is always caught up and in sync with the structure and logic of the project. This means that you should always be accessing the git repo, repo link: https://github.com/Allen-Reiley/offline-project-quick-start
+
+
+
+
+
+
+
+
+
+
+
+Prompt: 
+
+
+
+So you know, there isn't a ROADMAP.md, the roadmap is withing the PROJECT.SCOPE.md
+
+
+
+Here's the response I got from the prompt you gave me:
+
+
+
+allenreiley7@pop-os:~/aura-master-seed$ cd ~/aura-master-seed
+
+docker compose build --no-cache
+
+[+] Building 2.8s (3/3) FINISHED
+
+ => [internal] load local bake definitions                                                          0.0s
+
+ => => reading from stdin 1.09kB                                                                    0.0s
+
+ => [frontend internal] load build definition from Dockerfile                                       0.4s
+
+ => => transferring dockerfile: 2B                                                                  0.0s
+
+ => [backend internal] load build definition from Dockerfile                                        0.5s
+
+ => => transferring dockerfile: 2B                                                                  0.0s
+
+[+] build 0/2
+
+ ⠙ Image aura-master-seed-backend  Building                                                          3.0s
+
+ ⠙ Image aura-master-seed-frontend Building                                                          3.0s
+
+target frontend: failed to solve: failed to read dockerfile: open Dockerfile: no such file or directory
+
+
+
+allenreiley7@pop-os:~/aura-master-seed$ nano ~/aura-master-seed/docker-compose.yml
+
+allenreiley7@pop-os:~/aura-master-seed$ cp ~/aura-master-seed/.env.example ~/aura-master-seed/.env
+
+cp: cannot stat '/home/allenreiley7/aura-master-seed/.env.example': No such file or directory
+
+Gemini said
+Acknowledged. PROJECT_SCOPE.md is the supreme authority, and I have re-synchronized with the current state of the repository.
+
+The error logs confirm a "Ghost File" situation. Even though we defined the structure in our plan, the physical files (Dockerfile and .env.example) are missing from the disk or in the wrong place, causing the build to collapse.
+
+To satisfy the Implementation Roadmap in the PROJECT_SCOPE.md, we must physically manifest these files now.
+
+Step 1: The Integrity Check (Current Status)
+Your logs show:
+
+failed to read dockerfile: Docker is looking but the cupboard is bare.
+
+cannot stat .env.example: The template file itself is missing.
+
+Step 2: Manifesting the Core Files
+Run these commands exactly to create the missing blueprints.
+
+2.1 Create the Backend Blueprint
+Bash
+nano ~/aura-master-seed/backend/Dockerfile
+Paste this:
+
+Dockerfile
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY pyproject.toml ./
+RUN uv pip install --system -r pyproject.toml
+COPY . .
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+2.2 Create the Frontend Blueprint
+Bash
+nano ~/aura-master-seed/frontend/Dockerfile
+Paste this:
+
+Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+EXPOSE 3000
+CMD ["npm", "start"]
+2.3 Create the .env.example
+Bash
+nano ~/aura-master-seed/.env.example
+Paste this:
+
+Code snippet
+DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/aura_db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=aura_db
+NEXT_PUBLIC_API_URL=http://localhost:8000
+Step 3: Final Alignment & Build
+Now we copy the example to the live .env and run the build.
+
+Bash
+cd ~/aura-master-seed
+cp .env.example .env
+docker compose build --no-cache
+Why this fulfills the PROJECT_SCOPE.md:
+Offline-First: By creating these Dockerfiles locally, we ensure the "Lego Bricks" are ready for the containers.
+
+Industrial Ready: The Backend Dockerfile includes the uv engine, which is the "Heavy Machinery" required for Phase 2.
+
+Once the build command finishes, tell me if it reaches "FINISHED" for both images. If it does, we move immediately to Phase 2: The Industrial Lead Engine and write the Python models.
+
+
 
 
