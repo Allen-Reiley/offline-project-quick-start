@@ -1,7 +1,4 @@
 services:
-  db:
-    image: postgres:16-alpine
-    # ... (rest of db config)
 
   backend:
     build:
