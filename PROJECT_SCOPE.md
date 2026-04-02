@@ -1,6 +1,7 @@
-I have processed the entire history of our architectural "Phoenix" build. I have synthesized your background as a self-taught full-stack developer in the East Rand, your transition to Pop!_OS, the requirement for an offline-first "Master Seed," and the specific "Lego Set" philosophy we are using for AuraWorks.
 
 Below is the **PROJECT_SCOPE.md**. This is the definitive blueprint for our factory.
+
+Instruction: Read into REMEMBER.md, scan the file to read the prompt conversation that was had in the creation of the project, to when it worked and to when things got messy. It's to serve as a reference for what worked an what didn't, the errors we encountered and the fixes that were made, it's to inspire the highest level of quality in attempt to reduce the number of failures we encounter in the process of creating this project. For consistency purposeses, after every prompt and project modification, this code base will be uploaded to git, including having the conversations being included into the REMEMBER.md, so don't cache the link and/or information you find in the repo, the data will always be updated, so always update your context accordingly.
 
 ---
 
@@ -70,20 +71,76 @@ These are the custom scripts that turn the Seed into a Factory:
 
 ## 5. Implementation Roadmap
 
-### **Phase 1: The Integrity Fix (CURRENT)**
-* Ensure `docker-compose.yml` points to the correct subdirectory Dockerfiles.
-* Synchronize `.env` with `backend/app/core/config.py`.
-* Validate the `uv` binary path in the Backend Dockerfile.
+---
 
-### **Phase 2: Data & Intelligence**
-* Initialize SQLModel tables for "Industrial Clients."
-* Create a Seed script to populate the DB with local Gauteng market data.
-
-### **Phase 3: The Frontend Bridge**
-* Set up a global API client in Next.js.
-* Build the "Industrial Dashboard" using the hydrated components.
-
-### **Phase 4: Full Offline Test**
-* Disconnect internet and run `aura-init.sh` to confirm a 100% offline project build.
+## **I. Project Overview & Strategic Intent**
+The **AuraWorks Master Seed** is designed as a portable, Docker-orchestrated development environment.
+* **Structure:** A decoupled Monorepo (Frontend/Backend).
+* **Intent:** To eliminate "environment drift" and enable zero-latency development for industrial clients in the East Rand by having all "Lego Bricks" (UI components) and "Heavy Machinery" (Python processing) pre-baked into local containers.
 
 ---
+
+## **II. Phase 1: Infrastructure Synchronization (Immediate)**
+The priority is fixing the "File Not Found" errors by aligning the Docker Volume mappings and Build Contexts.
+
+### **1. Backend "UV" Engine Setup**
+We are using `uv` for 10x faster dependency resolution.
+* **Target:** `backend/Dockerfile`
+* **Logic:** Move `uv` binary to `/usr/local/bin` and ensure `pyproject.toml` is the source of truth.
+* **Packages to Add:** * `sqlmodel`, `alembic` (Database)
+    * `pandas`, `openpyxl` (Industrial Data)
+    * `reportlab` (PDF generation)
+    * `pydantic-settings`, `python-dotenv` (Config)
+    * `loguru` (Diagnostics)
+
+### **2. Frontend "Atomic" Setup**
+* **Target:** `frontend/Dockerfile`
+* **Logic:** Ensure the `build context` includes the `components/` folder moved from the root.
+* **Packages to Add:** * `framer-motion`, `clsx`, `tailwind-merge` (UI Core)
+    * `lucide-react` (Icons)
+    * `axios`, `@tanstack/react-query` (Data Bridge)
+    * `recharts` (Analytics)
+
+---
+
+## **III. Phase 2: The Industrial Lead Engine**
+Building the first functional logic for the B2B market analysis.
+
+1.  **Schema Definition:** Create `backend/app/models/industrial.py`.
+2.  **Seeding Logic:** Create a `seed.py` script to inject local East Rand industrial data (Companies, Sector, Contract Value) into the Postgres DB.
+3.  **The API Layer:** Build CRUD endpoints in `backend/app/api/v1/`.
+
+---
+
+## **IV. Phase 3: The Scaffolding Scripts (Aura-CLI)**
+This turns the repository from a "Project" into a "Factory."
+
+* **`aura-init <project-name>`**:
+    * Clones the Seed.
+    * Renames the Docker containers.
+    * Generates a new `.env` with unique keys.
+* **`aura-pull <component-name>`**: 
+    * Queries the local "Warehouse" (Verdaccio).
+    * Injects the code into `frontend/components/`.
+
+---
+
+## **V. Phase 4: Verification & Hardening**
+1.  **Offline Build Test:** Disable networking and run `docker compose build --no-cache`.
+2.  **Health Check:** Implement a `/health` route that checks DB latency and Disk I/O.
+3.  **Documentation:** Generate automated API docs via FastAPI `/docs`.
+
+---
+
+### **Summary Table: Package Manifest**
+
+| Domain | Backend (Python/UV) | Frontend (Next.js/TS) |
+| :--- | :--- | :--- |
+| **Core** | `fastapi`, `uvicorn` | `next`, `react`, `typescript` |
+| **Data** | `sqlmodel`, `pandas` | `tanstack-query`, `recharts` |
+| **UI/UX** | N/A | `framer-motion`, `lucide-react` |
+| **Industrial** | `reportlab`, `openpyxl` | `date-fns` |
+| **Security** | `python-jose`, `passlib` | `next-auth` (Planned) |
+
+
+
